@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {Link} from 'react-router-dom';
 
 class Form extends Component {
     constructor() {
@@ -43,11 +44,12 @@ class Form extends Component {
             
           <button onClick={this.resetForm} type="button">Cancel</button>
           <button type="submit"
-            onClick={(e)=>{
-            this.props.postRequest();
-            this.props.handleSubmit(e);
-            this.props.componentDidMount()}}>
-              Add to Inventory
+            onClick={()=>{
+            //this.props.putRequest();
+            //reset form values function
+            this.props.handleSubmit();
+            this.props.componentDidMount();}}>
+              Save Changes 
               </button>
         </div>
       );
