@@ -1,57 +1,88 @@
 import React, { Component } from "react";
+import {Link} from 'react-router-dom';
+import axios from 'axios';
+
 
 class Form extends Component {
-    constructor() {
-        super();
-        this.state = {
-          name: "",
-          price: 0,
-          imgurl: ""
-        };
-        this.baseState = {
-            name: "",
-            price: 0,
-            imgurl: ""
-        }
-      }
 
+  constructor(props) {
+    super(props);
     
-    
+    this.state = {
+        img: '',
+        name: '',
+        price: ''
+    }
+}
+
+addProduct(img, name, price) {
+   axios
+     .post(`/api/addproduct`, {img, name, price})
+     .then(res => {
+       this.setState({ products: res.data });
+     })
+     .then(() => {
+       this.setState({
+         redirect: true
+       });
+     })
+     .catch(err => console.log(err));
+     this.props.history.push('/dashboard')
+ }
+  
+  
+handleChange(e){
+  this.setState({
+    [e.target.name]: e.target.value
+    })
+}
+
+handleSubmit(e){
+  e.preventDefault()
+}
+
     render() {
+      let {img, name, price}=this.state
       return (
-        <div className="Home">
-          <h1>Form</h1>
-          <form onSubmit={this.props.handleSubmit}>
+        <div className="Form">
+          <form onSubmit={this.handleSubmit}>
               <label>
                   Image URL:
                   <br></br>
-                  <input type="text" onChange={(e) => this.props.formChange(e)} name="url"/>
+                  <input type="text" placeholder="Image URL" onChange={(e) => this.handleChange(e)} name="img"/>
               </label>
+
               <br></br>
               <label>
                   Product Name:
                   <br></br>
-                  <input type="text" onChange={(e) => this.props.formChange(e)} name="name"/>
+                  <input type="text" placeholder="Product Name" onChange={(e) => this.handleChange(e)} name="name"/>
               </label>
               <br></br>
               <label>
                   Price:
                   <br></br>
-                  <input type="number" onChange={(e) => this.props.formChange(e)} name="price"/>
+                  <input type="text" placeholder="Product Price" onChange={(e) => this.handleChange(e)} name="price"/>
               </label>
           </form>
+
+
+            <button>Cancel</button>
+         
+            <Link to='/dashboard' className="links"> 
+              <button type="submit"
+                onClick={(e)=>{
+                this.addProduct(img, name, price);
+                this.handleSubmit(e);}}>
+                  Add to Inventory
+              </button> 
+            </Link>
+
             
-          <button onClick={this.resetForm} type="button">Cancel</button>
-          <button type="submit"
-            onClick={(e)=>{
-            this.props.postRequest();
-            this.props.handleSubmit(e);
-            this.props.componentDidMount()}}>
-              Add to Inventory
-              </button>
+            
         </div>
       );
     }
   }
 
-export default Form;
+  export default Form;

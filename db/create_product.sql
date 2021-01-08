@@ -1,3 +1,3 @@
 INSERT INTO products 
-( url, name, price ) 
+( img, name, price ) 
 VALUES ( $1, $2, $3 );
